@@ -5,6 +5,8 @@ export interface MetricCard {
   unit: string;
   trend: number;
   accent: 'blue' | 'cyan' | 'green' | 'orange';
+  code: string;
+  description: string;
 }
 
 export interface TrendPoint {

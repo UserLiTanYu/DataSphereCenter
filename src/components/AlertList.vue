@@ -4,14 +4,24 @@ import type { AlertItem } from '@/types/dashboard';
 defineProps<{
   alerts: AlertItem[];
 }>();
+
+const levelClassMap: Record<AlertItem['level'], string> = {
+  高: 'alert-list__level--high',
+  中: 'alert-list__level--medium',
+  低: 'alert-list__level--low',
+};
 </script>
 
 <template>
   <section class="panel alert-list">
     <header class="panel__header">
-      <h2>实时告警</h2>
-      <span>Live Alerts</span>
+      <div>
+        <h2>实时告警</h2>
+        <span>Live Alerts</span>
+      </div>
+      <b>EVENT STREAM</b>
     </header>
+
     <div class="alert-list__items">
       <article
         v-for="alert in alerts"
@@ -20,7 +30,7 @@ defineProps<{
       >
         <span
           class="alert-list__level"
-          :class="`alert-list__level--${alert.level}`"
+          :class="levelClassMap[alert.level]"
         >
           {{ alert.level }}
         </span>
