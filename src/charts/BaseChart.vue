@@ -25,7 +25,7 @@ onMounted(() => {
 watch(
   () => props.option,
   (option) => {
-    chart?.setOption(option, true);
+    chart?.setOption(option, { notMerge: false, lazyUpdate: true });
   },
   { deep: true },
 );
@@ -42,4 +42,3 @@ onBeforeUnmount(() => {
     class="chart-canvas"
   />
 </template>
-

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onBeforeUnmount, onMounted } from 'vue';
 
 import BusinessTrendChart from '@/charts/BusinessTrendChart.vue';
 import CategoryPieChart from '@/charts/CategoryPieChart.vue';
@@ -17,11 +17,22 @@ const dashboardData = computed(() => dashboardStore.data);
 onMounted(async () => {
   logger.debug('Dashboard view mounted');
   await dashboardStore.loadDashboard();
+  dashboardStore.startAutoRefresh();
+});
+
+onBeforeUnmount(() => {
+  dashboardStore.stopAutoRefresh();
 });
 </script>
 
 <template>
-  <DashboardLayout>
+  <DashboardLayout
+    :auto-refresh-enabled="dashboardStore.autoRefreshEnabled"
+    :data-mode="dashboardStore.dataMode"
+    :last-updated="dashboardStore.lastUpdated"
+    :refreshing="dashboardStore.refreshing"
+    @toggle-refresh="dashboardStore.toggleAutoRefresh"
+  >
     <section
       v-if="dashboardStore.loading"
       class="loading-state"
@@ -35,6 +46,13 @@ onMounted(async () => {
       {{ dashboardStore.error }}
     </section>
     <template v-else-if="dashboardData">
+      <p
+        v-if="dashboardStore.refreshError"
+        class="refresh-warning"
+      >
+        {{ dashboardStore.refreshError }}
+      </p>
+
       <section class="metric-grid">
         <MetricCard
           v-for="metric in dashboardData.metrics"

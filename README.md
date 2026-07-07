@@ -2,7 +2,7 @@
 
 中文名：**数境中枢**
 
-DataSphereCenter 是一个面向数据可视化大屏场景的前端项目。当前阶段使用纯前端 Mock 数据，后续可以通过环境变量切换到真实 API，而页面组件无需改动。
+DataSphereCenter 是一个面向数据可视化大屏场景的 Vue 前端项目。项目当前支持 **Mock 动态数据演示**，后续也可以通过环境变量切换到真实 API 轮询模式，页面组件无需改动。
 
 ## 技术栈
 
@@ -19,6 +19,16 @@ DataSphereCenter 是一个面向数据可视化大屏场景的前端项目。当
 - Prettier
 - Stylelint
 
+## 核心能力
+
+- 科技驾驶舱风格大屏界面
+- 指标卡、趋势图、分类占比、区域排行、实时告警、资源使用率
+- Mock/API 双模式数据源
+- Mock 模式下数据自动变化
+- API 模式下支持定时轮询真实接口
+- 自动刷新、暂停/继续刷新、最后更新时间展示
+- 单元测试、端到端测试和代码质量检查
+
 ## 目录结构
 
 ```text
@@ -30,7 +40,7 @@ src/
 ├─ views/               # 页面视图
 ├─ charts/              # ECharts 图表组件
 ├─ services/            # 数据服务层
-├─ mock/                # Mock 数据
+├─ mock/                # Mock 数据和动态数据生成器
 ├─ stores/              # Pinia 状态管理
 ├─ types/               # TypeScript 类型定义
 ├─ utils/               # 工具函数和日志工具
@@ -71,10 +81,10 @@ npm run test:e2e     # 运行 Playwright 端到端测试
 项目通过统一数据服务层隔离页面和数据来源：
 
 ```text
-页面组件 -> services -> dataProvider -> mockProvider 或 apiProvider
+页面组件 -> stores/services -> dataProvider -> mockProvider 或 apiProvider
 ```
 
-默认使用 Mock：
+默认使用动态 Mock：
 
 ```env
 VITE_DATA_SOURCE=mock
@@ -95,10 +105,33 @@ GET /dashboard
 
 返回结构请参考 [src/types/dashboard.ts](src/types/dashboard.ts)。
 
+## 动态数据说明
+
+Mock 模式下，`src/mock/dashboard.generator.ts` 会生成平滑变化的数据：
+
+- 今日访问量持续增长
+- 活跃用户数上下波动
+- 数据接入量缓慢增长
+- 告警数量动态变化
+- 趋势图持续更新最新时间点
+- 分类占比、区域排行、资源使用率轻微波动
+- 实时告警列表随机新增或更新状态
+
+自动刷新逻辑由 Pinia store 管理：
+
+- `refreshDashboard()`：刷新大屏数据
+- `startAutoRefresh()`：开始定时刷新
+- `stopAutoRefresh()`：停止定时刷新
+- `toggleAutoRefresh()`：暂停或继续刷新
+- `lastUpdated`：最后更新时间
+- `refreshing`：刷新状态
+
+默认刷新间隔为 3 秒。
+
 ## 测试说明
 
-- `Vitest` 用于单元测试，当前覆盖格式化工具。
-- `Playwright` 用于端到端测试，当前验证首页标题和核心指标可见。
+- `Vitest` 用于单元测试，覆盖格式化工具和动态 Mock 数据生成器。
+- `Playwright` 用于端到端测试，验证首页标题和核心指标可见。
 
 ## 代码质量
 
@@ -110,3 +143,4 @@ GET /dashboard
 ## 开源协议
 
 本项目使用 MIT License，详见 [LICENSE](LICENSE)。
+

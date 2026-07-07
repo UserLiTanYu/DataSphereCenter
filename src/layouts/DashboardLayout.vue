@@ -2,6 +2,17 @@
 import { appConfig } from '@/config/app';
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
+defineProps<{
+  dataMode: string;
+  refreshing: boolean;
+  autoRefreshEnabled: boolean;
+  lastUpdated: string;
+}>();
+
+defineEmits<{
+  toggleRefresh: [];
+}>();
+
 const { currentTime } = useCurrentTime();
 </script>
 
@@ -18,7 +29,7 @@ const { currentTime } = useCurrentTime();
           <i />
           Online
         </strong>
-        <small>运行正常 · 数据同步中</small>
+        <small>{{ refreshing ? '数据刷新中' : '运行正常' }} · {{ dataMode }}</small>
       </div>
 
       <div class="dashboard-header__title">
@@ -31,7 +42,14 @@ const { currentTime } = useCurrentTime();
       <div class="dashboard-header__side dashboard-header__side--right">
         <span class="dashboard-header__label">当前时间</span>
         <strong>{{ currentTime }}</strong>
-        <small>Asia/Shanghai · Live</small>
+        <small>最后更新 · {{ lastUpdated || '等待同步' }}</small>
+        <button
+          class="dashboard-header__action"
+          type="button"
+          @click="$emit('toggleRefresh')"
+        >
+          {{ autoRefreshEnabled ? '暂停刷新' : '继续刷新' }}
+        </button>
       </div>
     </header>
 
