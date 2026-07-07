@@ -13,6 +13,7 @@
     "lint:eslint": "eslint .",
     "lint:style": "stylelint \"src/**/*.{css,vue}\"",
     "format": "prettier --write .",
+    "screenshot": "node scripts/capture-dashboard.mjs",
     "test": "run-s test:unit test:e2e",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"

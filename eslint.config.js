@@ -8,6 +8,17 @@ export default [
     ignores: ['dist/**', 'coverage/**', 'node_modules/**', 'playwright-report/**', 'test-results/**'],
   },
   js.configs.recommended,
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        fetch: 'readonly',
+      },
+    },
+  },
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   {
@@ -31,4 +42,3 @@ export default [
     },
   },
 ];
-
