@@ -1,64 +1,112 @@
 # DataSphereCenter
 
-## 项目名称
+中文名：**数境中枢**
 
-中文名：数境中枢
+DataSphereCenter 是一个面向数据可视化大屏场景的前端项目。当前阶段使用纯前端 Mock 数据，后续可以通过环境变量切换到真实 API，而页面组件无需改动。
 
-英文名：DataSphereCenter
+## 技术栈
 
-## 项目简介
+- Vue 3
+- Vite
+- TypeScript
+- Pinia
+- Vue Router
+- ECharts
+- Axios
+- Vitest
+- Playwright
+- ESLint
+- Prettier
+- Stylelint
 
-数境中枢是一个数据大屏项目，目标是通过可视化图表、关键指标卡片、趋势分析和地图/业务看板等方式，将分散的数据集中展示，帮助用户快速了解业务运行状态。
-
-本项目适合用于学习和开发企业数据大屏、运营监控大屏、园区管理大屏、智慧城市大屏等场景。
-
-## 项目定位
-
-- 数据汇聚：集中展示多个业务模块的核心数据。
-- 可视分析：通过图表、指标、排行、趋势等方式呈现数据。
-- 决策辅助：帮助管理者快速发现问题和观察变化。
-- 大屏展示：适配大尺寸屏幕，适合投屏、展厅和监控中心使用。
-
-## 推荐技术方向
-
-后续可以根据学习进度选择以下技术：
-
-- 前端框架：Vue 3 或 React
-- 构建工具：Vite
-- 图表库：ECharts
-- 地图能力：高德地图、百度地图或 GeoJSON
-- 样式方案：CSS、Sass 或 Tailwind CSS
-- 数据接口：REST API 或本地 Mock 数据
-
-## 建议目录结构
+## 目录结构
 
 ```text
-DataSphereCenter/
-├─ public/              # 静态资源
-├─ src/                 # 源码目录
-│  ├─ assets/           # 图片、字体等资源
-│  ├─ components/       # 公共组件
-│  ├─ views/            # 页面视图
-│  ├─ charts/           # 图表组件
-│  ├─ mock/             # 模拟数据
-│  ├─ styles/           # 全局样式
-│  └─ main.*            # 项目入口
-├─ README.md            # 项目说明文档
-├─ LICENSE              # 开源协议
-└─ .gitignore           # Git 忽略配置
+src/
+├─ app/                 # 应用初始化、路由、插件注册
+├─ assets/              # 图片、字体等静态资源
+├─ components/          # 通用组件
+├─ layouts/             # 大屏布局组件
+├─ views/               # 页面视图
+├─ charts/              # ECharts 图表组件
+├─ services/            # 数据服务层
+├─ mock/                # Mock 数据
+├─ stores/              # Pinia 状态管理
+├─ types/               # TypeScript 类型定义
+├─ utils/               # 工具函数和日志工具
+├─ hooks/               # Vue 组合式函数
+├─ config/              # 全局配置
+├─ styles/              # 全局样式
+└─ tests/               # 单元测试和端到端测试
 ```
 
-## 开发计划
+## 本地启动
 
-1. 初始化前端项目基础结构。
-2. 设计数据大屏整体布局。
-3. 开发顶部标题栏和时间组件。
-4. 开发核心指标卡片。
-5. 接入 ECharts 图表。
-6. 准备 Mock 数据。
-7. 完成大屏适配和视觉优化。
+```bash
+npm install
+npm run dev
+```
+
+默认访问地址：
+
+```text
+http://127.0.0.1:5173
+```
+
+## 常用命令
+
+```bash
+npm run dev          # 启动开发服务器
+npm run build        # 类型检查并构建项目
+npm run type-check   # TypeScript 类型检查
+npm run lint         # 运行 ESLint 和 Stylelint
+npm run format       # 使用 Prettier 格式化代码
+npm run test         # 运行单元测试和端到端测试
+npm run test:unit    # 运行 Vitest 单元测试
+npm run test:e2e     # 运行 Playwright 端到端测试
+```
+
+## Mock/API 切换
+
+项目通过统一数据服务层隔离页面和数据来源：
+
+```text
+页面组件 -> services -> dataProvider -> mockProvider 或 apiProvider
+```
+
+默认使用 Mock：
+
+```env
+VITE_DATA_SOURCE=mock
+```
+
+切换真实 API：
+
+```env
+VITE_DATA_SOURCE=api
+VITE_API_BASE_URL=/api
+```
+
+真实接口需要提供：
+
+```text
+GET /dashboard
+```
+
+返回结构请参考 [src/types/dashboard.ts](src/types/dashboard.ts)。
+
+## 测试说明
+
+- `Vitest` 用于单元测试，当前覆盖格式化工具。
+- `Playwright` 用于端到端测试，当前验证首页标题和核心指标可见。
+
+## 代码质量
+
+- `ESLint` 检查 TypeScript 和 Vue 代码。
+- `Stylelint` 检查 CSS 和 Vue 样式。
+- `Prettier` 统一格式。
+- `vue-tsc` 做类型检查。
 
 ## 开源协议
 
-本项目使用 MIT License 开源协议，详情请查看 [LICENSE](LICENSE) 文件。
-
+本项目使用 MIT License，详见 [LICENSE](LICENSE)。

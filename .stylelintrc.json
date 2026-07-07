@@ -1,0 +1,9 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "customSyntax": "postcss-html",
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "keyframes-name-pattern": null
+  }
+}
