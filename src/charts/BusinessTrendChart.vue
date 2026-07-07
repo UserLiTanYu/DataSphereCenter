@@ -18,24 +18,26 @@ const option = computed<EChartsOption>(() => ({
     textStyle: { color: '#dff8ff' },
   },
   legend: {
-    top: 0,
+    top: 2,
     right: 8,
     icon: 'roundRect',
-    textStyle: { color: '#b9d7ff' },
+    itemWidth: 26,
+    itemHeight: 12,
+    textStyle: { color: '#b9d7ff', fontSize: 12 },
   },
-  grid: { top: 48, left: 44, right: 22, bottom: 28 },
+  grid: { top: 44, left: 56, right: 28, bottom: 30 },
   xAxis: {
     type: 'category',
     boundaryGap: false,
     data: props.data.map((item) => item.time),
     axisTick: { show: false },
     axisLine: { lineStyle: { color: 'rgba(96, 200, 255, 0.34)' } },
-    axisLabel: { color: '#9fb9d8' },
+    axisLabel: { color: '#9fb9d8', margin: 9 },
   },
   yAxis: {
     type: 'value',
     splitLine: { lineStyle: { color: 'rgba(91, 164, 255, 0.12)' } },
-    axisLabel: { color: '#9fb9d8' },
+    axisLabel: { color: '#9fb9d8', margin: 12 },
   },
   series: [
     {
@@ -65,7 +67,7 @@ const option = computed<EChartsOption>(() => ({
 </script>
 
 <template>
-  <section class="panel chart-panel chart-panel--wide">
+  <section class="panel chart-panel">
     <header class="panel__header">
       <div>
         <h2>业务趋势</h2>
@@ -76,4 +78,3 @@ const option = computed<EChartsOption>(() => ({
     <BaseChart :option="option" />
   </section>
 </template>
-

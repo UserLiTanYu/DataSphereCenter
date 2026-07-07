@@ -5,12 +5,7 @@ import { useCurrentTime } from '@/hooks/useCurrentTime';
 defineProps<{
   dataMode: string;
   refreshing: boolean;
-  autoRefreshEnabled: boolean;
   lastUpdated: string;
-}>();
-
-defineEmits<{
-  toggleRefresh: [];
 }>();
 
 const { currentTime } = useCurrentTime();
@@ -43,13 +38,6 @@ const { currentTime } = useCurrentTime();
         <span class="dashboard-header__label">当前时间</span>
         <strong>{{ currentTime }}</strong>
         <small>最后更新 · {{ lastUpdated || '等待同步' }}</small>
-        <button
-          class="dashboard-header__action"
-          type="button"
-          @click="$emit('toggleRefresh')"
-        >
-          {{ autoRefreshEnabled ? '暂停刷新' : '继续刷新' }}
-        </button>
       </div>
     </header>
 

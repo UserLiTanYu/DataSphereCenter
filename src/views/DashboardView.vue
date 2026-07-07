@@ -3,10 +3,11 @@ import { computed, onBeforeUnmount, onMounted } from 'vue';
 
 import BusinessTrendChart from '@/charts/BusinessTrendChart.vue';
 import CategoryPieChart from '@/charts/CategoryPieChart.vue';
+import CenterOverview from '@/charts/CenterOverview.vue';
+import RadarChart from '@/charts/RadarChart.vue';
 import RegionRankChart from '@/charts/RegionRankChart.vue';
-import AlertList from '@/components/AlertList.vue';
+import AlertTicker from '@/components/AlertTicker.vue';
 import MetricCard from '@/components/MetricCard.vue';
-import ResourceOverview from '@/components/ResourceOverview.vue';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useDashboardStore } from '@/stores/dashboardStore';
 import { logger } from '@/utils/logger';
@@ -27,11 +28,9 @@ onBeforeUnmount(() => {
 
 <template>
   <DashboardLayout
-    :auto-refresh-enabled="dashboardStore.autoRefreshEnabled"
     :data-mode="dashboardStore.dataMode"
     :last-updated="dashboardStore.lastUpdated"
     :refreshing="dashboardStore.refreshing"
-    @toggle-refresh="dashboardStore.toggleAutoRefresh"
   >
     <section
       v-if="dashboardStore.loading"
@@ -61,13 +60,27 @@ onBeforeUnmount(() => {
         />
       </section>
 
-      <section class="dashboard-grid">
-        <BusinessTrendChart :data="dashboardData.trends" />
-        <CategoryPieChart :data="dashboardData.categoryShares" />
-        <RegionRankChart :data="dashboardData.regionRanks" />
-        <AlertList :alerts="dashboardData.alerts" />
-        <ResourceOverview :resources="dashboardData.resources" />
+      <section class="dashboard-body">
+        <div class="dashboard-body__left">
+          <BusinessTrendChart :data="dashboardData.trends" />
+          <CategoryPieChart :data="dashboardData.categoryShares" />
+        </div>
+        <div class="dashboard-body__center">
+          <CenterOverview
+            :nodes="dashboardData.centerNodes"
+            :links="dashboardData.centerLinks"
+          />
+        </div>
+        <div class="dashboard-body__right">
+          <RegionRankChart :data="dashboardData.regionRanks" />
+          <RadarChart
+            :indicators="dashboardData.radarIndicators"
+            :scores="dashboardData.radarScores"
+          />
+        </div>
       </section>
+
+      <AlertTicker :events="dashboardData.alertEvents" />
     </template>
   </DashboardLayout>
 </template>

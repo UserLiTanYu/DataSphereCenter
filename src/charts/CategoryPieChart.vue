@@ -31,8 +31,8 @@ const option = computed<EChartsOption>(() => ({
     {
       name: '分类占比',
       type: 'pie',
-      radius: ['38%', '60%'],
-      center: ['50%', '36%'],
+      radius: ['36%', '58%'],
+      center: ['50%', '40%'],
       avoidLabelOverlap: true,
       labelLayout: {
         hideOverlap: true,
@@ -47,13 +47,13 @@ const option = computed<EChartsOption>(() => ({
       label: {
         alignTo: 'edge',
         color: '#dff8ff',
-        edgeDistance: 14,
+        edgeDistance: 10,
         formatter: '{b}\n{d}%',
         lineHeight: 16,
       },
       labelLine: {
-        length: 10,
-        length2: 16,
+        length: 8,
+        length2: 14,
         maxSurfaceAngle: 80,
       },
       data: props.data,
@@ -75,4 +75,3 @@ const option = computed<EChartsOption>(() => ({
     <BaseChart :option="option" />
   </section>
 </template>
-

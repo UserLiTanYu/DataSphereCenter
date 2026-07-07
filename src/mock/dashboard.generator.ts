@@ -1,5 +1,5 @@
 import { dashboardMock } from '@/mock/dashboard.mock';
-import type { AlertItem, DashboardData } from '@/types/dashboard';
+import type { AlertEvent, AlertItem, DashboardData } from '@/types/dashboard';
 
 const trendLimit = 8;
 let snapshot: DashboardData = structuredClone(dashboardMock);
@@ -12,6 +12,19 @@ const alertTitles = [
   '资源池负载出现轻微抖动',
   '区域链路质量自动校准',
 ];
+
+const alertEventTitles = [
+  '北京教学节点完成数据同步',
+  '实时订单流量进入高峰监控',
+  '深圳节点图表渲染耗时升高',
+  '学生实训任务提交量突破阈值',
+  '课程案例下载服务运行正常',
+  '成都节点缓存命中率提升',
+  '武汉区域网络延迟恢复正常',
+  '上海节点数据写入量激增',
+];
+
+const alertEventRegions = ['华北区', '华南区', '华东区', '西南区', '华中区', '全域', '教学平台', '资源中心'];
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
@@ -81,6 +94,38 @@ const updateAlerts = (data: DashboardData) => {
   data.alerts = data.alerts.slice(0, 4);
 };
 
+const updateCenterNodes = (data: DashboardData) => {
+  data.centerNodes = data.centerNodes.map((node) =>
+    node.category === 'center'
+      ? node
+      : { ...node, value: jitter(node.value, 0.06, 30, 90) },
+  );
+  data.centerLinks = data.centerLinks.map((link) => ({
+    ...link,
+    value: jitter(link.value, 0.08, 40, 100),
+  }));
+};
+
+const updateRadarScores = (data: DashboardData) => {
+  data.radarScores = data.radarScores.map((score) => ({
+    ...score,
+    value: clamp(Math.round(score.value + randomBetween(-3, 3)), 50, 98),
+  }));
+};
+
+const updateAlertEvents = (data: DashboardData) => {
+  const shouldAdd = Math.random() > 0.5;
+
+  if (shouldAdd) {
+    const newEvent: AlertEvent = {
+      time: currentAlertTime(),
+      title: pick(alertEventTitles),
+      region: pick(alertEventRegions),
+    };
+    data.alertEvents = [newEvent, ...data.alertEvents].slice(0, 6);
+  }
+};
+
 export const generateDashboardData = (): DashboardData => {
   const nextData = structuredClone(snapshot);
   const [visits, users, dataAccess, alerts] = nextData.metrics as [
@@ -113,13 +158,16 @@ export const generateDashboardData = (): DashboardData => {
   normalizeShares(nextData);
   nextData.regionRanks = nextData.regionRanks.map((item) => ({
     ...item,
-    value: jitter(item.value, 0.045, 36, 100),
+    value: jitter(item.value, 0.045, 3000, 10000),
   }));
   nextData.resources = nextData.resources.map((item) => ({
     ...item,
     value: jitter(item.value, 0.06, 40, 90),
   }));
   updateAlerts(nextData);
+  updateCenterNodes(nextData);
+  updateRadarScores(nextData);
+  updateAlertEvents(nextData);
 
   snapshot = nextData;
   return structuredClone(snapshot);

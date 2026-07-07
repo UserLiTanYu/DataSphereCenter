@@ -40,6 +40,37 @@ export interface ResourceUsage {
   color: string;
 }
 
+export interface CenterNode {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  value: number;
+  category: 'center' | 'region';
+}
+
+export interface CenterLink {
+  source: string;
+  target: string;
+  value: number;
+}
+
+export interface RadarIndicator {
+  name: string;
+  max: number;
+}
+
+export interface RadarScore {
+  name: string;
+  value: number;
+}
+
+export interface AlertEvent {
+  time: string;
+  title: string;
+  region: string;
+}
+
 export interface DashboardData {
   metrics: MetricCard[];
   trends: TrendPoint[];
@@ -47,5 +78,10 @@ export interface DashboardData {
   regionRanks: RegionRank[];
   alerts: AlertItem[];
   resources: ResourceUsage[];
+  centerNodes: CenterNode[];
+  centerLinks: CenterLink[];
+  radarIndicators: RadarIndicator[];
+  radarScores: RadarScore[];
+  alertEvents: AlertEvent[];
 }
 

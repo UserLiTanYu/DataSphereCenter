@@ -18,41 +18,48 @@ const option = computed<EChartsOption>(() => ({
     borderColor: 'rgba(51, 214, 255, 0.42)',
     textStyle: { color: '#dff8ff' },
   },
-  grid: { top: 18, left: 46, right: 18, bottom: 28 },
-  xAxis: {
-    type: 'category',
-    data: props.data.map((item) => item.region),
-    axisTick: { show: false },
-    axisLabel: { color: '#9fb9d8' },
-    axisLine: { lineStyle: { color: 'rgba(96, 200, 255, 0.34)' } },
-  },
+  grid: { top: 14, left: 58, right: 36, bottom: 14 },
   yAxis: {
+    type: 'category',
+    data: [...props.data].reverse().map((item) => item.region),
+    axisTick: { show: false },
+    axisLabel: { color: '#b9d7ff', fontSize: 13, margin: 10 },
+    axisLine: { show: false },
+  },
+  xAxis: {
     type: 'value',
-    splitLine: { lineStyle: { color: 'rgba(91, 164, 255, 0.12)' } },
-    axisLabel: { color: '#9fb9d8' },
+    show: false,
   },
   series: [
     {
-      name: '区域指数',
+      name: '城市指数',
       type: 'bar',
-      data: props.data.map((item) => item.value),
-      barWidth: 18,
+      data: [...props.data].reverse().map((item) => item.value),
+      barWidth: 14,
+      barCategoryGap: '36%',
       itemStyle: {
-        borderRadius: [8, 8, 0, 0],
+        borderRadius: [0, 6, 6, 0],
         color: {
           type: 'linear',
           x: 0,
           y: 0,
-          x2: 0,
-          y2: 1,
+          x2: 1,
+          y2: 0,
           colorStops: [
-            { offset: 0, color: '#35f2a6' },
-            { offset: 0.46, color: '#33d6ff' },
-            { offset: 1, color: 'rgba(79, 140, 255, 0.28)' },
+            { offset: 0, color: 'rgba(51, 214, 255, 0.18)' },
+            { offset: 0.6, color: '#33d6ff' },
+            { offset: 1, color: '#ffd166' },
           ],
         },
-        shadowBlur: 12,
-        shadowColor: 'rgba(51, 214, 255, 0.32)',
+        shadowBlur: 10,
+        shadowColor: 'rgba(51, 214, 255, 0.28)',
+      },
+      label: {
+        show: true,
+        position: 'right',
+        color: '#b9d7ff',
+        fontSize: 12,
+        distance: 8,
       },
     },
   ],
@@ -63,12 +70,11 @@ const option = computed<EChartsOption>(() => ({
   <section class="panel chart-panel">
     <header class="panel__header">
       <div>
-        <h2>区域排行</h2>
-        <span>Region Ranking</span>
+        <h2>城市排名</h2>
+        <span>City Ranking</span>
       </div>
-      <b>TOP REGIONS</b>
+      <b>RANKING</b>
     </header>
     <BaseChart :option="option" />
   </section>
 </template>
-
